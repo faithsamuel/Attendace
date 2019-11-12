@@ -7,23 +7,13 @@
       <router-link to="/admin">Admin</router-link>
     </div>
     <router-view />
-
-    <!-- <SignIn /> -->
-    <!-- <StaffTodo /> -->
-    <!-- <StaffLog /> -->
-    <!-- <Admin /> -->
   </div>
 </template>
 
 <script>
 export default {
   name: 'app',
-  components: {
-    // SignIn,
-    // StaffTodo,
-    // StaffLog,
-    // Admin
-  }
+  components: {}
 }
 </script>
 
