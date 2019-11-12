@@ -22,7 +22,7 @@
         <div class="content">
           <ul class="has-text-left">
             <li v-for="task in tasks" :key="task">
-              <input type="checkbox" checked :done="tasks.done" v-model="tasks.done" />
+              <input type="checkbox" v-model="tasks.done" />
               {{task.task}}
             </li>
           </ul>
@@ -45,7 +45,7 @@ export default {
       timeout: ['Take a break', 'Done for today'],
       onBreak: false,
       requestType: 'Take a break',
-      tasks: [{ task: 'why are you here', done: false }]
+      tasks: []
     }
   },
   methods: {
@@ -60,7 +60,7 @@ export default {
       }
     },
     addTask(task) {
-      this.tasks.push({ task })
+      this.tasks.push({ task, done: false })
       this.tasks.task = ''
     }
   }
