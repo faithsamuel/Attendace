@@ -1,17 +1,21 @@
 <template>
-  <div class="container is-fullheight">
-    <form class="box column is-3" @submit.prevent="submitForm">
-      <h1 class="title has-text-centered">Login Page</h1>
-      <b-field label="Email">
-        <b-input type="email" v-model="email" placeholder="Please enter your email" maxlength="30"></b-input>
-      </b-field>
+  <form @submit.prevent="submitForm" autocomplete="false">
+    <h4 class="subtitle has-text-centered">Login Page</h4>
+    <b-field label="Email" label-position="on-border">
+      <b-input type="email" v-model="email" placeholder="Please enter your email" maxlength="30"></b-input>
+    </b-field>
 
-      <b-field label="Password">
-        <b-input v-model="password" type="password" placeholder="enter your password" maxlength="30"></b-input>
-      </b-field>
-      <button :class="{'is-loading': submitting}" type="submit" class="button is-info is-centered">Sign in for today</button>
-    </form>
-  </div>
+    <b-field label="Password" label-position="on-border">
+      <b-input v-model="password" type="password" placeholder="enter your password" maxlength="30"></b-input>
+    </b-field>
+    <div class="action">
+      <button
+        :class="{ 'is-loading': submitting }"
+        type="submit"
+        class="button is-primary is-centered"
+      >Sign in for today</button>
+    </div>
+  </form>
 </template>
 
 <script>
@@ -61,4 +65,9 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.action {
+  display: flex;
+  justify-content: center;
+}
+</style>
