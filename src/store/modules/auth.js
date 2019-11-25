@@ -13,6 +13,9 @@ export default {
     SET_TOKEN(state, token) {
       localStorage.setItem("token", token);
       state.token = token;
+    },
+    LOGOUT(state) {
+      state.token = null;
     }
   },
   getters: {
@@ -49,6 +52,10 @@ export default {
         commit("SET_PROFILE", profile);
         return profile;
       });
+    },
+    logout({ commit }) {
+      localStorage.removeItem("token");
+      commit("LOGOUT");
     }
   }
 };
