@@ -1,4 +1,7 @@
 import { dummyRequest } from "@/helpers";
+import MS from "@/lib/auth";
+import { dispatch } from "../../../../../AppData/Local/Microsoft/TypeScript/3.6/node_modules/rxjs/internal/observable/pairs";
+let defaultReqs = { scopes: ["user.read", "mail.send"] };
 
 export default {
   namespaced: true,
@@ -11,7 +14,6 @@ export default {
       state.profile = profile;
     },
     SET_TOKEN(state, token) {
-      localStorage.setItem("token", token);
       state.token = token;
     },
     LOGOUT(state) {
@@ -23,8 +25,6 @@ export default {
       return state.profile;
     },
     loggedIn(state) {
-      // return !!state.token;
-      // return Boolean(state.token);
       return state.token != null;
     },
     token(state) {
@@ -32,30 +32,40 @@ export default {
     }
   },
   actions: {
-    login({ dispatch, commit }, { email, password }) {
-      // return dummyRequest("Invalid email or password", 1000, true)
-      return dummyRequest({ token: "sdfsdfgweg999" }, 1000)
-        .then(res => {
-          commit("SET_TOKEN", res.token);
-          return dispatch("fetchProfile");
+    login({ dispatch, commit }) {
+      function handleTokenResponse(res) {
+        commit("SET_TOKEN", res.accessToken);
+        return dispatch("fetchProfile");
+      }
+
+      return MS.loginPopup(defaultReqs)
+        .then(response => {
+          return MS.acquireTokenSilent(defaultReqs).then(handleTokenResponse);
         })
-        .catch(e => {
-          throw e;
+        .catch(err => {
+          console.log(err);
         });
     },
-    fetchProfile({ commit, getters }, token) {
-      return dummyRequest({
-        name: "Abolarin Olanrewaju",
-        email: "lanre@omniswift.com",
-        token: getters.token
-      }).then(profile => {
-        commit("SET_PROFILE", profile);
-        return profile;
-      });
+    fetchProfile({ commit, dispatch, getters }, token) {
+      let profile = MS.getAccount();
+      commit("SET_PROFILE", { name: profile.name, email: profile.userName });
+      dispatch("logs/signIn", null, { root: true });
+      return Promise.resolve(profile);
     },
     logout({ commit }) {
-      localStorage.removeItem("token");
+      MS.logout();
       commit("LOGOUT");
+    },
+    init({ commit, dispatch }) {
+      let profile;
+      if ((profile = MS.getAccount())) {
+        commit("SET_PROFILE", { email: profile.userName, name: profile.name });
+        dispatch("logs/signIn", null, { root: true });
+
+        MS.acquireTokenSilent(defaultReqs).then(res => {
+          commit("SET_TOKEN", res.accessToken);
+        });
+      }
     }
   }
 };

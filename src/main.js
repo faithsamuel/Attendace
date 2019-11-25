@@ -5,20 +5,19 @@ import store from "./store";
 import "./registerServiceWorker";
 
 import Buefy from "buefy";
-
 Vue.use(Buefy, {
   defaultIconPack: "mdi"
 });
-
 Vue.config.productionTip = false;
-
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-  created() {
-    if (this.$store.getters["auth/loggedIn"]) {
-      this.$store.dispatch("auth/fetchProfile");
+store.dispatch("auth/init").finally(() => {
+  new Vue({
+    router,
+    store,
+    render: h => h(App),
+    created() {
+      // if (this.$store.getters["auth/loggedIn"]) {
+      //   this.$store.dispatch("auth/fetchProfile");
+      // }
     }
-  }
-}).$mount("#app");
+  }).$mount("#app");
+});

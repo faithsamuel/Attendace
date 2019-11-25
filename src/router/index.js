@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-// import Home from '../views/Home.vue'
+import Auth from "../components/Auth";
 import SignIn from "../views/SignIn.vue";
 import Home from "../components/Home.vue";
 import StaffLog from "../components/StaffLog.vue";
@@ -15,6 +15,7 @@ const routes = [
     path: "/",
     component: SignIn,
     beforeEnter: (to, from, next) => {
+      console.log("here");
       if (store.getters["auth/loggedIn"]) {
         return next({ name: "home" });
       }
@@ -44,16 +45,13 @@ const routes = [
     path: "/timer",
     component: Timer,
     meta: { requiresAuth: true }
+  },
+  {
+    name: "auth",
+    path: "/auth",
+    component: Auth,
+    meta: { requiresAuth: true }
   }
-
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  // }
 ];
 
 const router = new VueRouter({

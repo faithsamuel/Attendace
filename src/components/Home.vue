@@ -7,7 +7,7 @@
         </b-navbar-item>
       </template>
       <template slot="start">
-        <b-navbar-item href="#">Username(emailAddress)</b-navbar-item>
+        <b-navbar-item href="#">{{user.name}}({{user.email}})</b-navbar-item>
       </template>
     </b-navbar>
     <div class="container">
@@ -16,15 +16,16 @@
           <b-tab-item label="Home" icon="home">
             <div class="home-btns">
               <b-button type="is-primary" @click="takeBreak">Take a break</b-button>
-              <!-- <br /> -->
               <b-button type="is-danger" @click="endDay">Leave for the day</b-button>
             </div>
           </b-tab-item>
           <b-tab-item label="Tasks" icon="clipboard-check">
-            <Tasks />
+            <div class="tasks-container">
+              <Tasks />
+            </div>
           </b-tab-item>
           <b-tab-item label="Daily Logs" icon="calendar-clock">
-            <StaffLog />
+            <!-- <StaffLog /> -->
           </b-tab-item>
         </b-tabs>
       </section>
@@ -33,12 +34,12 @@
 </template>
 
 <script>
-import StaffLog from './StaffLog.vue'
+// import StaffLog from './StaffLog.vue'
 import Tasks from './Tasks.vue'
 export default {
-  name: 'StaffTodo',
+  name: 'Home',
   components: {
-    StaffLog,
+    // StaffLog,
     Tasks
   },
   data() {
@@ -54,7 +55,6 @@ export default {
     },
     endDay() {
       this.$store.dispatch('auth/logout')
-      this.$router.push('/')
     },
     showTimer(event) {
       if (event === this.timeout[0]) {
@@ -62,6 +62,11 @@ export default {
       } else {
         this.onBreak = false
       }
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.getters[`auth/profile`]
     }
   }
 }
@@ -91,5 +96,10 @@ ul {
       margin: 0 1em;
     }
   }
+}
+
+.tasks-container {
+  display: flex;
+  justify-content: center;
 }
 </style>
